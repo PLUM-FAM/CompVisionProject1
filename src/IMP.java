@@ -31,9 +31,6 @@ class IMP implements MouseListener{
    //your 2D array of pixels
     int picture[][];
 
-    //Instantiate our functions class
-    functions func = new functions();
-
     /* 
      * In the Constructor I set up the GUI, the frame the menus. The open pulldown 
      * menu is how you will open an image to manipulate. 
@@ -99,6 +96,8 @@ class IMP implements MouseListener{
      
      JMenuItem firstItem = new JMenuItem("MyExample - fun1 method");
      JMenuItem secondItem = new JMenuItem("Rotate Clockwise");
+     JMenuItem thirdItem = new JMenuItem("Grayscale");
+     JMenuItem fourthItem = new JMenuItem("Blur");
     
      firstItem.addActionListener(new ActionListener(){
             @Override
@@ -107,12 +106,24 @@ class IMP implements MouseListener{
      
      secondItem.addActionListener(new ActionListener(){
          @Override
-       public void actionPerformed(ActionEvent evt){func.rotateImage();}
+       public void actionPerformed(ActionEvent evt){rotateImage();}
         });
+
+      thirdItem.addActionListener(new ActionListener(){
+         @Override
+         public void actionPerformed(ActionEvent evt){grayscale();}
+      });
+
+      fourthItem.addActionListener(new ActionListener(){
+         @Override
+         public void actionPerformed(ActionEvent evt){blur();}
+      });
    
       
       fun.add(firstItem);
       fun.add(secondItem);
+      fun.add(thirdItem);
+      fun.add(fourthItem);
      
       return fun;   
 
@@ -257,19 +268,21 @@ class IMP implements MouseListener{
   private void fun1()
   {
      
-    for(int i=0; i<height; i++)
-       for(int j=0; j<width; j++)
-       {   
-          int rgbArray[] = new int[4];
+      for(int i=0; i<height; i++)
+      {
+         for(int j=0; j<width; j++)
+         {   
+            int rgbArray[] = new int[4];
          
-          //get three ints for R, G and B
-          rgbArray = getPixelArray(picture[i][j]);
+            //get three ints for R, G and B
+            rgbArray = getPixelArray(picture[i][j]);
          
-        
-           rgbArray[1] = 0;
-           //take three ints for R, G, B and put them back into a single int
-           picture[i][j] = getPixels(rgbArray);
-        } 
+         
+            rgbArray[1] = 0;
+            //take three ints for R, G, B and put them back into a single int
+            picture[i][j] = getPixels(rgbArray);
+         } 
+      }
      resetPicture();
   }
   
@@ -280,20 +293,74 @@ class IMP implements MouseListener{
    {
       System.out.println("rotateImage called");
       for(int i=0; i<height; i++)
-            for(int j=0; j<width; j++)
-            {   
-               int rgbArray[] = new int[4];
-            
-               //get three ints for R, G and B
-               rgbArray = getPixelArray(picture[i][j]);
-            
-               //take three ints for R, G, B and put them back into a single int
-               picture[i][j] = getPixels(rgbArray);
-            } 
+      {
+         for(int j=0; j<width; j++)
+         {   
+            int rgbArray[] = new int[4];
+         
+            //get three ints for R, G and B
+            rgbArray = getPixelArray(picture[i][j]);
+         
+            //take three ints for R, G, B and put them back into a single int
+            picture[i][j] = getPixels(rgbArray);
+         } 
+      }
       resetPicture();
    }
   
 
+   private void grayscale()
+   {
+      System.out.println("Grayscale called");
+      for(int i=0; i<height; i++)
+      {
+         for(int j=0; j<width; j++)
+         {   
+            int rgbArray[] = new int[4];
+         
+            //get three ints for R, G and B
+            rgbArray = getPixelArray(picture[i][j]);
+            
+            double grayR = 0;
+            double grayB = 0;
+            double grayG = 0;
+            int gray = 0;
+
+            grayR = (double)rgbArray[1] * 0.299;
+            grayB = (double)rgbArray[2] * 0.587;
+            grayG = (double)rgbArray[3] * 0.114;
+
+            gray = ((int)grayR + (int)grayB + (int)grayG);
+         
+            rgbArray[1] = gray;
+            rgbArray[2] = gray;
+            rgbArray[3] = gray;
+
+            //take three ints for R, G, B and put them back into a single int
+            picture[i][j] = getPixels(rgbArray);
+         } 
+      }
+      resetPicture();
+   }
+
+   private void blur()
+   {
+      grayscale();
+      for(int i=0; i<height; i++)
+      {
+         for(int j=0; j<width; j++)
+         {   
+            int rgbArray[] = new int[4];
+         
+            //get three ints for R, G and B
+            rgbArray = getPixelArray(picture[i][j]);
+         
+            //take three ints for R, G, B and put them back into a single int
+            picture[i][j] = getPixels(rgbArray);
+         } 
+      }
+      resetPicture();
+   }
   
   
   private void quit()
