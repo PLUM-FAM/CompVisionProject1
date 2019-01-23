@@ -95,14 +95,21 @@ class IMP implements MouseListener{
      JMenu fun = new JMenu("Functions");
      
      JMenuItem firstItem = new JMenuItem("MyExample - fun1 method");
+     JMenuItem secondItem = new JMenuItem("Rotate Clockwise");
     
      firstItem.addActionListener(new ActionListener(){
             @Override
           public void actionPerformed(ActionEvent evt){fun1();}
            });
+     
+     secondItem.addActionListener(new ActionListener(){
+         @Override
+       public void actionPerformed(ActionEvent evt){rotateImage();}
+        });
    
        
       fun.add(firstItem);
+      fun.add(secondItem);
      
       return fun;   
 
@@ -261,6 +268,26 @@ class IMP implements MouseListener{
            picture[i][j] = getPixels(rgbArray);
         } 
      resetPicture();
+  }
+  
+  
+  
+  // rotate the image ***CLOCKWISE***
+  private void rotateImage()
+  {
+	  System.out.println("rotateImage called");
+	  for(int i=0; i<height; i++)
+	       for(int j=0; j<width; j++)
+	       {   
+	          int rgbArray[] = new int[4];
+	         
+	          //get three ints for R, G and B
+	          rgbArray = getPixelArray(picture[i][j]);
+	         
+	           //take three ints for R, G, B and put them back into a single int
+	           picture[i][j] = getPixels(rgbArray);
+	        } 
+	  resetPicture();
   }
   
 
