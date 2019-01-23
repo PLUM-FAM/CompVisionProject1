@@ -110,7 +110,7 @@ class IMP implements MouseListener{
        public void actionPerformed(ActionEvent evt){func.rotateImage();}
         });
    
-       
+      
       fun.add(firstItem);
       fun.add(secondItem);
      
