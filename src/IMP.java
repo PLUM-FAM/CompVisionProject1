@@ -31,6 +31,9 @@ class IMP implements MouseListener{
    //your 2D array of pixels
     int picture[][];
 
+    //Instantiate our functions class
+    functions func = new functions();
+
     /* 
      * In the Constructor I set up the GUI, the frame the menus. The open pulldown 
      * menu is how you will open an image to manipulate. 
@@ -104,7 +107,7 @@ class IMP implements MouseListener{
      
      secondItem.addActionListener(new ActionListener(){
          @Override
-       public void actionPerformed(ActionEvent evt){rotateImage();}
+       public void actionPerformed(ActionEvent evt){func.rotateImage();}
         });
    
        
@@ -272,23 +275,23 @@ class IMP implements MouseListener{
   
   
   
-  // rotate the image ***CLOCKWISE***
-  private void rotateImage()
-  {
-	  System.out.println("rotateImage called");
-	  for(int i=0; i<height; i++)
-	       for(int j=0; j<width; j++)
-	       {   
-	          int rgbArray[] = new int[4];
+//   // rotate the image ***CLOCKWISE***
+//   private void rotateImage()
+//   {
+// 	  System.out.println("rotateImage called");
+// 	  for(int i=0; i<height; i++)
+// 	       for(int j=0; j<width; j++)
+// 	       {   
+// 	          int rgbArray[] = new int[4];
 	         
-	          //get three ints for R, G and B
-	          rgbArray = getPixelArray(picture[i][j]);
+// 	          //get three ints for R, G and B
+// 	          rgbArray = getPixelArray(picture[i][j]);
 	         
-	           //take three ints for R, G, B and put them back into a single int
-	           picture[i][j] = getPixels(rgbArray);
-	        } 
-	  resetPicture();
-  }
+// 	           //take three ints for R, G, B and put them back into a single int
+// 	           picture[i][j] = getPixels(rgbArray);
+// 	        } 
+// 	  resetPicture();
+//   }
   
 
   
