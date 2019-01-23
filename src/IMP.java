@@ -31,8 +31,6 @@ class IMP implements MouseListener{
    //your 2D array of pixels
     int picture[][];
 
-    //Instantiate our functions class
-    functions func = new functions();
 
     /* 
      * In the Constructor I set up the GUI, the frame the menus. The open pulldown 
@@ -107,7 +105,7 @@ class IMP implements MouseListener{
      
      secondItem.addActionListener(new ActionListener(){
          @Override
-       public void actionPerformed(ActionEvent evt){func.rotateImage();}
+       public void actionPerformed(ActionEvent evt){rotateImage();}
         });
    
       
@@ -279,17 +277,19 @@ class IMP implements MouseListener{
    private void rotateImage()
    {
       System.out.println("rotateImage called");
-      for(int i=0; i<height; i++)
-            for(int j=0; j<width; j++)
-            {   
-               int rgbArray[] = new int[4];
-            
-               //get three ints for R, G and B
-               rgbArray = getPixelArray(picture[i][j]);
-            
-               //take three ints for R, G, B and put them back into a single int
-               picture[i][j] = getPixels(rgbArray);
+      
+      int destArray[][] = new int[height][width]; //wh
+      
+      
+      for(int h=0; h<height; h++)
+    	  
+            for(int w=0; w<width; w++)
+            {           
+            	
+                destArray[w][height-h-1]= picture[h][w];
+                
             } 
+      picture = destArray;
       resetPicture();
    }
   
