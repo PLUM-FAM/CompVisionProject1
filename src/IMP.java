@@ -288,20 +288,19 @@ class IMP implements MouseListener{
   
   
   
-//   // rotate the image ***CLOCKWISE***
+// rotate the image ***CLOCKWISE***
    private void rotateImage()
    {
       System.out.println("rotateImage called");
       
-      int destArray[][] = new int[height][width]; //wh
+      int destArray[][] = new int[600][600]; //wh
       
       
-      for(int h=0; h<height; h++)
+      for(int h=0; h<height; ++h)
     	  
-            for(int w=0; w<width; w++)
+            for(int w=0; w<width; ++w)
             {           
-            	
-                destArray[w][height-h-1]= picture[h][w];
+                destArray[w][h]= picture[height-h-1][w];
                 
             } 
       picture = destArray;
