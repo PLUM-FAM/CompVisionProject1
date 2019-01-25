@@ -345,16 +345,37 @@ class IMP implements MouseListener{
 
    private void blur()
    {
+	  int tempArray[][] = new int[height][width];
       grayscale();
-      for(int i=0; i<height; i++)
+      for(int i=1; i<height-1; i++)
       {
-         for(int j=0; j<width; j++)
+         for(int j=1; j<width-1; j++)
          {   
             int rgbArray[] = new int[4];
          
             //get three ints for R, G and B
-            rgbArray = getPixelArray(picture[i][j]);
-         
+            // rgbArray = getPixelArray(picture[i][j]);
+            
+            int tl = getPixelArray(picture[i-1][j-1])[1];
+            int tm = getPixelArray(picture[i-1][j])[1];
+            int tr = getPixelArray(picture[i-1][j+1])[1];
+            
+            int ml = getPixelArray(picture[i][j-1])[1];
+            int mr = getPixelArray(picture[i][j+1])[1];
+            
+            int bl = getPixelArray(picture[i+1][j-1])[1];
+            int bm = getPixelArray(picture[i+1][j])[1];
+            int br = getPixelArray(picture[i+1][j+1])[1];
+            
+            
+            int average = (tl+tm+tr+ml+mr+bl+bm+br)/8;
+            
+            rgbArray[0] = 255;
+            rgbArray[1] = average;
+            rgbArray[2] = average;
+            rgbArray[3] = average;
+            
+            tempArray[i][j] = getPixels(rgbArray);
             //take three ints for R, G, B and put them back into a single int
             picture[i][j] = getPixels(rgbArray);
          } 
