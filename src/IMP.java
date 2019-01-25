@@ -10,6 +10,7 @@ import java.io.File;
 import java.awt.image.PixelGrabber;
 import java.awt.image.MemoryImageSource;
 import java.util.prefs.Preferences;
+import java.util.Scanner;
 
 class IMP implements MouseListener
 {
@@ -112,6 +113,7 @@ class IMP implements MouseListener
       JMenuItem thirdItem = new JMenuItem("Grayscale");
       JMenuItem fourthItem = new JMenuItem("Blur");
       JMenuItem fifthItem = new JMenuItem("Edge Detection");
+      JMenuItem sixthItem = new JMenuItem("Color Detection"); 
       
       firstItem.addActionListener(new ActionListener()
       {
@@ -142,6 +144,11 @@ class IMP implements MouseListener
          @Override
          public void actionPerformed(ActionEvent evt){edgeDetection();}
       });
+      sixthItem.addActionListener(new ActionListener()
+      {
+         @Override
+         public void actionPerformed(ActionEvent evt){colorDetection();}
+      });
 
       
       fun.add(firstItem);
@@ -149,6 +156,7 @@ class IMP implements MouseListener
       fun.add(thirdItem);
       fun.add(fourthItem);
       fun.add(fifthItem);
+      fun.add(sixthItem);
       
       return fun;   
 
@@ -380,6 +388,8 @@ class IMP implements MouseListener
    {
 	  int tempArray[][] = new int[height][width];
       grayscale();
+      
+      //looping through each pixel in the picture with an exclusion of a 1 pixel border on all sides.
       for(int i=1; i<height-1; i++)
       {
          for(int j=1; j<width-1; j++)
@@ -426,7 +436,72 @@ class IMP implements MouseListener
 	   
    }
 
-
+   
+   
+   private void colorDetection()
+   {
+	   Scanner reader = new Scanner(System.in); 	   
+	   System.out.println("Enter R int Value: ");
+	   int r = reader.nextInt();
+	   System.out.println("Enter G int Value: ");
+	   int g = reader.nextInt();
+	   System.out.println("Enter B int Value: ");
+	   int b = reader.nextInt();
+	   
+	   System.out.println("Enter threshold value");
+	   int threshold = reader.nextInt();
+	   //System.out.println("R: " + r + " " + "g: " + g + " " + "b: " + b);
+	   
+	   int rMin = r - threshold;
+	   int rMax = r + threshold;
+	   int gMin = g - threshold;
+	   int gMax = g + threshold;
+	   int bMin = b - threshold;
+	   int bMax = b + threshold;
+	   
+	   
+	   for(int i=0; i<height; i++)
+	   {
+	      for(int j=0; j<width; j++)
+	      { 
+	    	  Boolean match = false;
+	    	  int rgbArray[] = new int[4];
+	          
+	          //get three ints for R, G and B
+	          rgbArray = getPixelArray(picture[i][j]);
+	          
+	          //if in red threshold
+	          if(rgbArray[1] >= rMin && rgbArray[1] <= rMax)
+	          {
+	        	//and in green threshold
+	        	if(rgbArray[2] >= gMin && rgbArray[2] <= gMax)
+	        	{
+	        		//and in the blue threshold
+	        		if(rgbArray[3] >= bMin && rgbArray[3] <= bMax)
+	        		{
+	        			match = true;
+	        			//color white
+	        			rgbArray[1] =255;
+	        			rgbArray[2] =255;
+	        			rgbArray[3] =255;
+	        		}
+	        	}
+	          }
+	          //color black if not a match
+	          if(!match)
+	          {
+	        	rgbArray[1] =0;
+      			rgbArray[2] =0;
+      			rgbArray[3] =0;
+	        	  
+	          }
+	         	          //take three ints for R, G, B and put them back into a single int
+	          picture[i][j] = getPixels(rgbArray);
+	      }
+	   }
+	   resetPicture();
+	   reader.close();
+   }
    private void quit()
    {  
       System.exit(0);
