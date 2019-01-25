@@ -414,6 +414,8 @@ class IMP implements MouseListener
       resetPicture();
    }
 
+   // TODO:
+   // 1. For some reason this is turning the picture yellow, not detecting edges
    private void edgeDetection()
    {
       grayscale();
@@ -423,7 +425,7 @@ class IMP implements MouseListener
          for(int j=1; j<width-1; j++)
          {   
             int rgbArray[] = new int[4];
-            
+
             int tl = getPixelArray(picture[i-1][j-1])[1];
             int tm = getPixelArray(picture[i-1][j])[1];
             int tr = getPixelArray(picture[i-1][j+1])[1];
@@ -489,8 +491,6 @@ class IMP implements MouseListener
                rgbArray[k] *= 8;
             }
             tempArray[i][j] = getPixels(rgbArray);
-
-            
          }
       }
       picture = tempArray;
