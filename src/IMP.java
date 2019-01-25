@@ -158,7 +158,7 @@ class IMP implements MouseListener
    * This method handles opening an image file, breaking down the picture to a one-dimensional array and then drawing the image on the frame. 
    * You don't need to worry about this method. 
    */
-      private void handleOpen()
+   private void handleOpen()
    {  
       img = new ImageIcon();
       JFileChooser chooser = new JFileChooser();
@@ -227,14 +227,17 @@ class IMP implements MouseListener
    {
       for(int i = 0; i<width*height; i++)
             pixels[i] = results[i]; 
+
       Image img2 = toolkit.createImage(new MemoryImageSource(width, height, pixels, 0, width)); 
 
       JLabel label2 = new JLabel(new ImageIcon(img2));    
-         mp.removeAll();
-         mp.add(label2);
+
+      mp.removeAll();
+      mp.add(label2);
          
-         mp.revalidate(); 
-      }
+      mp.revalidate(); 
+   }
+
    /*
    * This method is called to redraw the screen with the new image. 
    */
