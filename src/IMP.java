@@ -231,11 +231,13 @@ class IMP implements MouseListener
       Image img2 = toolkit.createImage(new MemoryImageSource(width, height, pixels, 0, width)); 
 
       JLabel label2 = new JLabel(new ImageIcon(img2));    
+
       mp.removeAll();
       mp.add(label2);
-   
+         
       mp.revalidate(); 
    }
+
    /*
    * This method is called to redraw the screen with the new image. 
    */
@@ -387,13 +389,16 @@ class IMP implements MouseListener
             //get three ints for R, G and B
             // rgbArray = getPixelArray(picture[i][j]);
             
+            //top row of the 3x3
             int tl = getPixelArray(picture[i-1][j-1])[1];
             int tm = getPixelArray(picture[i-1][j])[1];
             int tr = getPixelArray(picture[i-1][j+1])[1];
             
+            //middle row of 3x3 excluding the current pixel we are on
             int ml = getPixelArray(picture[i][j-1])[1];
             int mr = getPixelArray(picture[i][j+1])[1];
             
+            //bottom row of the 3x3
             int bl = getPixelArray(picture[i+1][j-1])[1];
             int bm = getPixelArray(picture[i+1][j])[1];
             int br = getPixelArray(picture[i+1][j+1])[1];
@@ -406,11 +411,13 @@ class IMP implements MouseListener
             rgbArray[2] = average;
             rgbArray[3] = average;
             
-            tempArray[i][j] = getPixels(rgbArray);
+            //put into temp array to not alter original image.
             //take three ints for R, G, B and put them back into a single int
-            picture[i][j] = getPixels(rgbArray);
-         } 
+            tempArray[i][j] = getPixels(rgbArray);
+          } 
       }
+      //set picture array to what tempArray is so the image can be re-drawn.
+      picture= tempArray;
       resetPicture();
    }
 
@@ -495,6 +502,7 @@ class IMP implements MouseListener
       }
       picture = tempArray;
       resetPicture();
+	   
    }
 
 
