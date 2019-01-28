@@ -475,6 +475,18 @@ class IMP implements MouseListener
                { bl, bm, br },
             };
 
+            int[][] filter1 = {
+               { -1,  0,  1 },
+               { -2,  0,  2 },
+               { -1,  0,  1 }
+           };
+   
+           int[][] filter2 = {
+               {  1,  2,  1 },
+               {  0,  0,  0 },
+               { -1, -2, -1 }
+           };
+
             for(int x = 0; x < 3; x++)
             {
                for(int y = 0; y < 3; y++)
