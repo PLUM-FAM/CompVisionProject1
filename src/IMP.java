@@ -114,6 +114,8 @@ class IMP implements MouseListener
       JMenuItem fourthItem = new JMenuItem("Blur");
       JMenuItem fifthItem = new JMenuItem("Edge Detection");
       JMenuItem sixthItem = new JMenuItem("Color Detection"); 
+      JMenuItem seventhItem = new JMenuItem("Draw Histograms"); 
+
       
       firstItem.addActionListener(new ActionListener()
       {
@@ -149,6 +151,11 @@ class IMP implements MouseListener
          @Override
          public void actionPerformed(ActionEvent evt){colorDetection();}
       });
+      seventhItem.addActionListener(new ActionListener()
+      {
+         @Override
+         public void actionPerformed(ActionEvent evt){drawHistograms();}
+      });
 
       
       fun.add(firstItem);
@@ -157,6 +164,7 @@ class IMP implements MouseListener
       fun.add(fourthItem);
       fun.add(fifthItem);
       fun.add(sixthItem);
+      fun.add(seventhItem);
       
       return fun;   
 
@@ -239,11 +247,12 @@ class IMP implements MouseListener
       Image img2 = toolkit.createImage(new MemoryImageSource(width, height, pixels, 0, width)); 
 
       JLabel label2 = new JLabel(new ImageIcon(img2));    
-
       mp.removeAll();
       mp.add(label2);
-         
-      mp.revalidate(); 
+      
+      mp.revalidate();
+      
+      
    }
 
    /*
@@ -260,7 +269,6 @@ class IMP implements MouseListener
       JLabel label2 = new JLabel(new ImageIcon(img2));    
          mp.removeAll();
          mp.add(label2);
-      
          mp.revalidate(); 
 
    }
@@ -334,16 +342,18 @@ class IMP implements MouseListener
    {
       System.out.println("rotateImage called");
       
-      int destArray[][] = new int[600][600]; //wh
-      
-      
+      int destArray[][] = new int[600][600];
+  
       for(int h=0; h<height; ++h)
-         
-            for(int w=0; w<width; ++w)
-            {           
-               destArray[w][h]= picture[height-h-1][w];
-                  
-            } 
+      {
+    	  for(int w=0; w<width; ++w)
+          {           
+    		  //destArray[w][h]= picture[height-h-1][w];
+              destArray[w][h]= picture[height-h-1][width-w-1];
+                    
+          } 
+      }
+      
       picture = destArray;
 
       resetPicture();
@@ -516,27 +526,25 @@ class IMP implements MouseListener
    }
 
    
-   
+   //sixthItem
    private void colorDetection()
    {
-	   Scanner reader = new Scanner(System.in); 	   
-	   System.out.println("Enter R int Value: ");
-	   int r = reader.nextInt();
-	   System.out.println("Enter G int Value: ");
-	   int g = reader.nextInt();
-	   System.out.println("Enter B int Value: ");
-	   int b = reader.nextInt();
+	   Scanner reader = new Scanner(System.in); 
 	   
-	   System.out.println("Enter threshold value");
-	   int threshold = reader.nextInt();
-	   //System.out.println("R: " + r + " " + "g: " + g + " " + "b: " + b);
+	   System.out.println("Enter R MIN Value: ");
+	   int rMin = reader.nextInt();
+	   System.out.println("Enter R MAX Value: ");
+	   int rMax = reader.nextInt();
 	   
-	   int rMin = r - threshold;
-	   int rMax = r + threshold;
-	   int gMin = g - threshold;
-	   int gMax = g + threshold;
-	   int bMin = b - threshold;
-	   int bMax = b + threshold;
+	   System.out.println("Enter G MIN Value: ");
+	   int gMin = reader.nextInt();
+	   System.out.println("Enter G MAX Value: ");
+	   int gMax = reader.nextInt();
+	   
+	   System.out.println("Enter B MIN Value: ");
+	   int bMin = reader.nextInt();
+	   System.out.println("Enter B MAX Value: ");
+	   int bMax = reader.nextInt();
 	   
 	   
 	   for(int i=0; i<height; i++)
@@ -581,6 +589,34 @@ class IMP implements MouseListener
 	   resetPicture();
 	   reader.close();
    }
+   
+   //seventhItem
+   private void drawHistograms()
+   {
+	   //individual panels/windows
+	   JFrame redFrame = new JFrame("Red");
+	   redFrame.setSize(305, 600);
+	   redFrame.setLocation(800, 0);
+	   JFrame greenFrame = new JFrame("Green");
+	   greenFrame.setSize(305, 600);
+	   greenFrame.setLocation(1150, 0);
+	   JFrame blueFrame = new JFrame("blue");
+	   blueFrame.setSize(305, 600);
+	   blueFrame.setLocation(1450, 0);
+	   MyPanel redPanel = new MyPanel();
+	   MyPanel greenPanel = new MyPanel();
+	   MyPanel bluePanel = new MyPanel();
+	   redFrame.getContentPane().add(redPanel, BorderLayout.CENTER);
+	   redFrame.setVisible(true);
+	   greenFrame.getContentPane().add(greenPanel, BorderLayout.CENTER);
+	   greenFrame.setVisible(true);
+	   blueFrame.getContentPane().add(bluePanel, BorderLayout.CENTER);
+	   blueFrame.setVisible(true);
+	   start.setEnabled(true);
+   }
+   
+   
+   
    private void quit()
    {  
       System.exit(0);
