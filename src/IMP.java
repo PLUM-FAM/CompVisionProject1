@@ -393,7 +393,7 @@ class IMP implements MouseListener
       for(int i=1; i<height-1; i++)
       {
          for(int j=1; j<width-1; j++)
-         {   
+         {  
             int rgbArray[] = new int[4];
          
             //get three ints for R, G and B
@@ -435,7 +435,15 @@ class IMP implements MouseListener
    // 1. For some reason this is turning the picture yellow, not detecting edges
    private void edgeDetection()
    {
+      for(int x = 0; x < 3; x++)
+      {
+         System.out.println(getPixelArray(picture[35][35])[x+1]);
+      }
       grayscale();
+      for(int x = 0; x < 3; x++)
+      {
+         System.out.println(getPixelArray(picture[35][35])[x+1]);
+      }
       int[][] tempArray = new int[height][width];
       for(int i=1; i<height-1; i++)
       {
@@ -448,71 +456,44 @@ class IMP implements MouseListener
             int tr = getPixelArray(picture[i-1][j+1])[1];
             
             int ml = getPixelArray(picture[i][j-1])[1];
+            int m = getPixelArray(picture[i][j])[1];
             int mr = getPixelArray(picture[i][j+1])[1];
             
             int bl = getPixelArray(picture[i+1][j-1])[1];
             int bm = getPixelArray(picture[i+1][j])[1];
             int br = getPixelArray(picture[i+1][j+1])[1];
 
-            for(int k = 1; k < rgbArray.length; k++)
-            {
-               rgbArray[k] = (tl * -1);
-            }
-            tempArray[i-1][j-1] = getPixels(rgbArray);
+            int[][] mask = {
+               { -1, -1, -1 },
+               { -1,  8, -1 },
+               { -1, -1, -1 }
+            };
 
-            for(int k = 1; k < rgbArray.length; k++)
-            {
-               rgbArray[k] = (tm * -1);
-            }
-            tempArray[i-1][j] = getPixels(rgbArray);
+            int[][] neighborhood = {
+               { tl, tm, tr },
+               { ml,  m, mr },
+               { bl, bm, br },
+            };
 
-            for(int k = 1; k < rgbArray.length; k++)
+            for(int x = 0; x < 3; x++)
             {
-               rgbArray[k] = (tr * -1);
+               for(int y = 0; y < 3; y++)
+               {
+                  neighborhood[x][y] *= mask[x][y];
+                  rgbArray[1] = 255 - neighborhood[x][y];
+                  rgbArray[2] = 255 - neighborhood[x][y];
+                  rgbArray[3] = 255 - neighborhood[x][y];
+                  tempArray[i-1+x][j-1+y] = getPixels(rgbArray);
+               }
             }
-            tempArray[i-1][j+1] = getPixels(rgbArray);
-            
-            for(int k = 1; k < rgbArray.length; k++)
-            {
-               rgbArray[k] = (ml * -1);
-            }
-            tempArray[i][j-1] = getPixels(rgbArray);
-
-            for(int k = 1; k < rgbArray.length; k++)
-            {
-               rgbArray[k] = (mr * -1);
-            }
-            tempArray[i][j+1] = getPixels(rgbArray);
-
-            for(int k = 1; k < rgbArray.length; k++)
-            {
-               rgbArray[k] = (bl * -1);
-            }
-            tempArray[i+1][j-1] = getPixels(rgbArray);
-
-            for(int k = 1; k < rgbArray.length; k++)
-            {
-               rgbArray[k] = (bm * -1);
-            }
-            tempArray[i+1][j] = getPixels(rgbArray);
-
-            for(int k = 1; k < rgbArray.length; k++)
-            {
-               rgbArray[k] = (br * -1);
-            }
-            tempArray[i+1][j+1] = getPixels(rgbArray);
-
-            for(int k = 1; k < rgbArray.length; k++)
-            {
-               rgbArray = getPixelArray(picture[i][j]);
-               rgbArray[k] *= 8;
-            }
-            tempArray[i][j] = getPixels(rgbArray);
          }
       }
       picture = tempArray;
-      resetPicture();
-	   
+      resetPicture();	
+      for(int x = 0; x < 3; x++)
+      {
+         System.out.println(getPixelArray(picture[35][35])[x+1]);
+      }   
    }
 
    
