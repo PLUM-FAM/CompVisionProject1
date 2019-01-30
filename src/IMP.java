@@ -588,7 +588,48 @@ class IMP implements MouseListener
    //seventhItem
    private void drawHistograms()
    {
-	   //individual panels/windows
+	   //total pixels
+	   int totalPixels = width*height;
+	   
+	   //frequency counters for each color & 0-255 value
+	   int[] redFreq = new int[256];
+	   int[] greenFreq = new int[256];
+	   int[] blueFreq = new int[256];
+	   
+	   //Gathering/calculating histogram data (i.e. frequencies)
+	   for(int h=0; h<height; ++h)
+	      {
+	    	  for(int w=0; w<width; ++w)
+	          {           
+	    		  int rgbArray[] = new int[4];
+	    	         
+	              //get three ints for R, G and B
+	              rgbArray = getPixelArray(picture[h][w]);
+	              
+	              //current pixel RGB values
+	              int r = rgbArray[1];
+	              int g = rgbArray[2];
+	              int b = rgbArray[3];
+	              
+	              //increasing corresponding frequency values by 1. 
+	              redFreq[r]++;
+	              greenFreq[g]++;
+	              blueFreq[b]++;
+	              
+	          } 
+	      }
+	   
+	   
+	   //adjusting frequencies by dividing by 5 (as suggested by hunter in class)
+	   for(int i =0; i< 255; i++)
+	   {
+		   redFreq[i] = redFreq[i]/5;
+		   greenFreq[i] = greenFreq[i]/5;
+		   blueFreq[i] = blueFreq[1]/5;  
+	   }
+	   
+	   //printing/displaying histogram data to frames/panels 
+		   
 	   JFrame redFrame = new JFrame("Red");
 	   redFrame.setSize(305, 600);
 	   redFrame.setLocation(800, 0);
@@ -598,9 +639,12 @@ class IMP implements MouseListener
 	   JFrame blueFrame = new JFrame("blue");
 	   blueFrame.setSize(305, 600);
 	   blueFrame.setLocation(1450, 0);
-	   MyPanel redPanel = new MyPanel();
-	   MyPanel greenPanel = new MyPanel();
-	   MyPanel bluePanel = new MyPanel();
+	   
+	   //Then pass those arrays to MyPanel constructor (frequency arrays)
+	   MyPanel redPanel = new MyPanel(redFreq); 
+	   MyPanel greenPanel = new MyPanel(greenFreq);
+	   MyPanel bluePanel = new MyPanel(blueFreq);
+	   
 	   redFrame.getContentPane().add(redPanel, BorderLayout.CENTER);
 	   redFrame.setVisible(true);
 	   greenFrame.getContentPane().add(greenPanel, BorderLayout.CENTER);
@@ -608,6 +652,8 @@ class IMP implements MouseListener
 	   blueFrame.getContentPane().add(bluePanel, BorderLayout.CENTER);
 	   blueFrame.setVisible(true);
 	   start.setEnabled(true);
+	   
+	   
    }
    
    
