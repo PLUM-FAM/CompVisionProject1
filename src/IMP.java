@@ -500,7 +500,6 @@ class IMP implements MouseListener
                rgbArray[3] = 0;
             }
             tempArray[i][j] = getPixels(rgbArray);
-            System.out.println(tempArray[i][j]);
          }
       }
       picture = tempArray;
@@ -674,5 +673,3 @@ class IMP implements MouseListener
    {
       IMP imp = new IMP();
    }
- 
-}
