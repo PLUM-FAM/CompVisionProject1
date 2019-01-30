@@ -90,7 +90,7 @@ class IMP implements MouseListener
       start.addActionListener(new ActionListener()
       {
          @Override
-         public void actionPerformed(ActionEvent evt){ fun1(); }
+         public void actionPerformed(ActionEvent evt){drawHistograms(); }
       });
 
       butPanel.add(start);
@@ -612,11 +612,10 @@ class IMP implements MouseListener
 	   {
 		   redFreq[i] = redFreq[i]/5;
 		   greenFreq[i] = greenFreq[i]/5;
-		   blueFreq[i] = blueFreq[1]/5;  
+		   blueFreq[i] = blueFreq[i]/5;  
 	   }
 	   
-	   //printing/displaying histogram data to frames/panels 
-		   
+	   //printing/displaying histogram data to frames/panels    
 	   JFrame redFrame = new JFrame("Red");
 	   redFrame.setSize(305, 600);
 	   redFrame.setLocation(800, 0);
@@ -639,7 +638,6 @@ class IMP implements MouseListener
 	   blueFrame.getContentPane().add(bluePanel, BorderLayout.CENTER);
 	   blueFrame.setVisible(true);
 	   start.setEnabled(true);
-	   
 	   
    }
    
