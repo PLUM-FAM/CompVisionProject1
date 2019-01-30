@@ -112,7 +112,8 @@ class IMP implements MouseListener
       JMenuItem secondItem = new JMenuItem("Rotate Clockwise");
       JMenuItem thirdItem = new JMenuItem("Grayscale");
       JMenuItem fourthItem = new JMenuItem("Blur");
-      JMenuItem fifthItem = new JMenuItem("Edge Detection");
+      JMenuItem fifthItem = new JMenuItem("Edge Detection 3x3");
+      JMenuItem eighthItem = new JMenuItem("Edge Detection 5x5");
       JMenuItem sixthItem = new JMenuItem("Color Detection"); 
       JMenuItem seventhItem = new JMenuItem("Draw Histograms"); 
 
@@ -144,7 +145,7 @@ class IMP implements MouseListener
       fifthItem.addActionListener(new ActionListener()
       {
          @Override
-         public void actionPerformed(ActionEvent evt){edgeDetection();}
+         public void actionPerformed(ActionEvent evt){edgeDetection3();}
       });
       sixthItem.addActionListener(new ActionListener()
       {
@@ -156,6 +157,11 @@ class IMP implements MouseListener
          @Override
          public void actionPerformed(ActionEvent evt){drawHistograms();}
       });
+      eighthItem.addActionListener(new ActionListener()
+      {
+         @Override
+         public void actionPerformed(ActionEvent evt){edgeDetection5();}
+      });
 
       
       fun.add(firstItem);
@@ -163,6 +169,7 @@ class IMP implements MouseListener
       fun.add(thirdItem);
       fun.add(fourthItem);
       fun.add(fifthItem);
+      fun.add(eighthItem);
       fun.add(sixthItem);
       fun.add(seventhItem);
       
@@ -442,7 +449,74 @@ class IMP implements MouseListener
       resetPicture();
    }
 
-   private void edgeDetection()
+   private void edgeDetection3()
+   {
+      grayscale();
+      int[][] tempArray = new int[height][width];
+      for(int i=1; i<height-1; i++)
+      {
+         for(int j=1; j<width-1; j++)
+         {   
+            int rgbArray[] = new int[4];
+
+            int tl = getPixelArray(picture[i-1][j-1])[1];
+            int tm = getPixelArray(picture[i-1][j])[1];
+            int tr = getPixelArray(picture[i-1][j+1])[1];
+            
+            int ml = getPixelArray(picture[i][j-1])[1];
+            int m = getPixelArray(picture[i][j])[1];
+            int mr = getPixelArray(picture[i][j+1])[1];
+            
+            int bl = getPixelArray(picture[i+1][j-1])[1];
+            int bm = getPixelArray(picture[i+1][j])[1];
+            int br = getPixelArray(picture[i+1][j+1])[1];
+
+            int[][] mask = {
+               { -1, -1, -1 },
+               { -1,  8, -1 },
+               { -1, -1, -1 }
+            };
+
+            int[][] neighborhood = {
+               { tl, tm, tr },
+               { ml,  m, mr },
+               { bl, bm, br },
+            };
+
+            int surround = 0;
+            for(int x = 0; x < 3; x++)
+            {
+               for(int y = 0; y < 3; y++)
+               {
+                  neighborhood[x][y] *= mask[x][y];
+                  surround += neighborhood[x][y];
+               }
+            }
+            // System.out.println(surround);
+            if(surround >= 100)
+            {
+               // System.out.println("Change to white");
+               rgbArray[0] = 255;
+               rgbArray[1] = 255;
+               rgbArray[2] = 255;
+               rgbArray[3] = 255;
+            }
+            else
+            {
+               // System.out.println("change to black");
+               rgbArray[0] = 255;
+               rgbArray[1] = 0;
+               rgbArray[2] = 0;
+               rgbArray[3] = 0;
+            }
+            tempArray[i][j] = getPixels(rgbArray);
+         }
+      }
+      picture = tempArray;
+      resetPicture();
+   }
+
+   private void edgeDetection5()
    {
       grayscale();
       int[][] tempArray = new int[height][width];
