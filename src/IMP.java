@@ -244,6 +244,7 @@ class IMP implements MouseListener
       for(int i = 0; i<width*height; i++)
             pixels[i] = results[i]; 
 
+      turnTwoDimensional();
       Image img2 = toolkit.createImage(new MemoryImageSource(width, height, pixels, 0, width)); 
 
       JLabel label2 = new JLabel(new ImageIcon(img2));    
