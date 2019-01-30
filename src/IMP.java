@@ -441,21 +441,9 @@ class IMP implements MouseListener
       resetPicture();
    }
 
-   // TODO:
-   // 1. For some reason this is turning the picture yellow, not detecting edges
    private void edgeDetection()
    {
-      for(int x = 0; x < 3; x++)
-      {
-         System.out.println(getPixelArray(picture[35][35])[x+1]);
-      }
       grayscale();
-      resetPicture();
-      
-      for(int x = 0; x < 3; x++)
-      {
-         System.out.println(getPixelArray(picture[35][35])[x+1]);
-      }
       int[][] tempArray = new int[height][width];
       for(int i=1; i<height-1; i++)
       {
@@ -487,35 +475,36 @@ class IMP implements MouseListener
                { bl, bm, br },
             };
 
-            int surround;
+            int surround = 0;
             for(int x = 0; x < 3; x++)
             {
                for(int y = 0; y < 3; y++)
                {
                   neighborhood[x][y] *= mask[x][y];
-                  surround += neighborhodd[x][x];
+                  surround += neighborhood[x][y];
                }
             }
+            // System.out.println(surround);
             if(surround >= 100)
             {
+               // System.out.println("Change to white");
                rgbArray[1] = 255;
                rgbArray[2] = 255;
                rgbArray[3] = 255;
             }
             else if(surround < 100)
             {
+               // System.out.println("change to black");
                rgbArray[1] = 0;
                rgbArray[2] = 0;
                rgbArray[3] = 0;
             }
+            tempArray[i][j] = getPixels(rgbArray);
+            System.out.println(tempArray[i][j]);
          }
       }
       picture = tempArray;
-      resetPicture();	
-      for(int x = 0; x < 3; x++)
-      {
-         System.out.println(getPixelArray(picture[35][35])[x+1]);
-      }   
+      resetPicture();	 
    }
 
    
