@@ -116,6 +116,7 @@ class IMP implements MouseListener
       JMenuItem eighthItem = new JMenuItem("Edge Detection 5x5");
       JMenuItem sixthItem = new JMenuItem("Color Detection"); 
       JMenuItem seventhItem = new JMenuItem("Draw Histograms"); 
+      JMenuItem ninthItem = new JMenuItem("Equalization");
 
       
       firstItem.addActionListener(new ActionListener()
@@ -162,6 +163,11 @@ class IMP implements MouseListener
          @Override
          public void actionPerformed(ActionEvent evt){edgeDetection5();}
       });
+      ninthItem.addActionListener(new ActionListener()
+      {
+         @Override
+         public void actionPerformed(ActionEvent evt){equalization();}
+      });
 
       
       fun.add(firstItem);
@@ -172,6 +178,7 @@ class IMP implements MouseListener
       fun.add(eighthItem);
       fun.add(sixthItem);
       fun.add(seventhItem);
+      fun.add(ninthItem);
       
       return fun;   
 
@@ -713,6 +720,144 @@ class IMP implements MouseListener
 	   greenFrame.setVisible(true);
 	   blueFrame.getContentPane().add(bluePanel, BorderLayout.CENTER);
 	   blueFrame.setVisible(true);
+	   start.setEnabled(true);
+	   
+   }
+   
+   private void equalization()
+   {
+	   drawHistograms();
+	   //total pixels
+	   int totalPixels = width*height;
+	   
+	   //frequency counters for each color & 0-255 value
+	   int[] redFreq = new int[256];
+	   int[] greenFreq = new int[256];
+	   int[] blueFreq = new int[256];
+	   
+	   //Gathering/calculating histogram data (i.e. frequencies)
+	   for(int h=0; h<height; ++h)
+	      {
+	    	  for(int w=0; w<width; ++w)
+	          {           
+	    		  int rgbArray[] = new int[4];
+	    	         
+	              //get three ints for R, G and B
+	              rgbArray = getPixelArray(picture[h][w]);
+	              
+	              //current pixel RGB values
+	              int r = rgbArray[1];
+	              int g = rgbArray[2];
+	              int b = rgbArray[3];
+	              
+	              //increasing corresponding frequency values by 1. 
+	              redFreq[r]++;
+	              greenFreq[g]++;
+	              blueFreq[b]++;
+	              
+	          } 
+	      }
+	   
+	   
+	   //adjusting frequencies by dividing by 5 (as suggested by hunter in class)
+	   for(int i =0; i< 255; i++)
+	   {
+		   redFreq[i] = redFreq[i]/5;
+		   greenFreq[i] = greenFreq[i]/5;
+		   blueFreq[i] = blueFreq[i]/5;  
+	   }
+	   
+	   
+	   //equalization
+	   int[] newRed = new int[redFreq.length];
+	   int[] newGreen = new int[greenFreq.length];
+	   int[] newBlue = new int[blueFreq.length];
+
+	   int cdfTotalRed = 0;
+	   int cdfMinRed = 10000;
+	   
+	   int cdfTotalGreen = 0;
+	   int cdfMinGreen = 10000;
+	   
+	   int cdfTotalBlue = 0;
+	   int cdfMinBlue = 10000;
+	   
+	   
+	   float r;
+	   float g;
+	   float b;
+	   
+	   int equalizedRed;
+	   int equalizedGreen;
+	   int equalizedBlue;
+	   
+	   
+	   //calculating cdf mins
+	   
+	   for(int i = 0; i <redFreq.length; i++)
+	   {
+		   if(redFreq[i] < cdfMinRed && redFreq[i] !=0) //we dont want 0 as min says wikipedia
+		   {
+			   cdfMinRed = redFreq[i];
+		   }
+		   
+	   }
+	   
+	   int[] rgbArray = new int[4];
+	   
+	   //calculating equalization
+	   for(int i = 0; i<redFreq.length; i++)
+	   {
+		   
+		   //calculating running totals
+		   cdfTotalRed += redFreq[i];
+
+		   
+		   
+		   //calculating h(v) unrounded
+		   r = (255 * ((cdfTotalRed - cdfMinRed) / ((height* width) - cdfMinRed)));
+		   
+		   //round
+		   equalizedRed = Math.round(r);
+		   equalizedGreen = Math.round(g);
+		   equalizedBlue = Math.round(b);
+		   
+		   
+		   rgbArray[0] = 255; //alpha hard code
+		   rgbArray[1] = equalizedRed;
+		   rgbArray[2] = equalizedGreen;
+		   rgbArray[3] = equalizedBlue;
+	   }
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   //printing/displaying new equalized histogram data to frames/panels    
+	   JFrame redFrameE = new JFrame("Red- Equalized");
+	   redFrameE.setSize(305, 600);
+	   redFrameE.setLocation(800, 0);
+	   JFrame greenFrameE = new JFrame("Green - Equalized");
+	   greenFrameE.setSize(305, 600);
+	   greenFrameE.setLocation(1150, 0);
+	   JFrame blueFrameE = new JFrame("blue - Equalized");
+	   blueFrameE.setSize(305, 600);
+	   blueFrameE.setLocation(1450, 0);
+	   
+	   //Then pass those arrays to MyPanel constructor (frequency arrays)
+	   MyPanel redPanel = new MyPanel(newRed); 
+	   MyPanel greenPanel = new MyPanel(newGreen);
+	   MyPanel bluePanel = new MyPanel(newBlue);
+	   
+	   redFrameE.getContentPane().add(redPanel, BorderLayout.CENTER);
+	   redFrameE.setVisible(true);
+	   greenFrameE.getContentPane().add(greenPanel, BorderLayout.CENTER);
+	   greenFrameE.setVisible(true);
+	   blueFrameE.getContentPane().add(bluePanel, BorderLayout.CENTER);
+	   blueFrameE.setVisible(true);
 	   start.setEnabled(true);
 	   
    }
