@@ -488,13 +488,15 @@ class IMP implements MouseListener
             if(surround >= 100)
             {
                // System.out.println("Change to white");
+               rgbArray[0] = 255;
                rgbArray[1] = 255;
                rgbArray[2] = 255;
                rgbArray[3] = 255;
             }
-            else if(surround < 100)
+            else
             {
                // System.out.println("change to black");
+               rgbArray[0] = 255;
                rgbArray[1] = 0;
                rgbArray[2] = 0;
                rgbArray[3] = 0;
@@ -503,7 +505,7 @@ class IMP implements MouseListener
          }
       }
       picture = tempArray;
-      resetPicture();	 
+      resetPicture();
    }
 
    
