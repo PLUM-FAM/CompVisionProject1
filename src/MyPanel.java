@@ -51,12 +51,22 @@ int startX, flag, startY, endX, endY;
          
          //draw the lines for histogram frequencies
          //255 lines based off of index and frequency value in freq[]
-         g2.drawLine(0, 0, 100, 100);
+         
+         //panel size 305wx600h
+         
+         //print a line for each frequency in freq
+         for (int f = 0; f < 255; f++)
+         {
+        	 g2.drawLine(5+f, this.getHeight(), 5+f, this.getHeight()-freq[f]);
+         }
+         
+         
+         
      }
     public void drawing()
     {
         
-        gc.drawLine(startX, startY, endX, endY);
+        //gc.drawLine(startX, startY, endX, endY);
         repaint();
     }
    
