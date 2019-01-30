@@ -242,7 +242,11 @@ class IMP implements MouseListener
    private void reset()
    {
       for(int i = 0; i<width*height; i++)
-            pixels[i] = results[i]; 
+      {
+         pixels[i] = results[i]; 
+      }
+
+      turnTwoDimensional();
 
       Image img2 = toolkit.createImage(new MemoryImageSource(width, height, pixels, 0, width)); 
 
@@ -250,9 +254,7 @@ class IMP implements MouseListener
       mp.removeAll();
       mp.add(label2);
       
-      mp.revalidate();
-      
-      
+      mp.revalidate();     
    }
 
    /*
