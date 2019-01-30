@@ -487,28 +487,26 @@ class IMP implements MouseListener
                { bl, bm, br },
             };
 
-            int[][] filter1 = {
-               { -1,  0,  1 },
-               { -2,  0,  2 },
-               { -1,  0,  1 }
-           };
-   
-           int[][] filter2 = {
-               {  1,  2,  1 },
-               {  0,  0,  0 },
-               { -1, -2, -1 }
-           };
-
+            int surround;
             for(int x = 0; x < 3; x++)
             {
                for(int y = 0; y < 3; y++)
                {
                   neighborhood[x][y] *= mask[x][y];
-                  rgbArray[1] = 255 - neighborhood[x][y];
-                  rgbArray[2] = 255 - neighborhood[x][y];
-                  rgbArray[3] = 255 - neighborhood[x][y];
-                  tempArray[i-1+x][j-1+y] = getPixels(rgbArray);
+                  surround += neighborhodd[x][x];
                }
+            }
+            if(surround >= 100)
+            {
+               rgbArray[1] = 255;
+               rgbArray[2] = 255;
+               rgbArray[3] = 255;
+            }
+            else if(surround < 100)
+            {
+               rgbArray[1] = 0;
+               rgbArray[2] = 0;
+               rgbArray[3] = 0;
             }
          }
       }
