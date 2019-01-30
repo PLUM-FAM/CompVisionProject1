@@ -527,40 +527,62 @@ class IMP implements MouseListener
    {
       grayscale();
       int[][] tempArray = new int[height][width];
-      for(int i=1; i<height-1; i++)
+      for(int i=2; i<height-2; i++)
       {
-         for(int j=1; j<width-1; j++)
+         for(int j=2; j<width-2; j++)
          {   
             int rgbArray[] = new int[4];
 
-            int tl = getPixelArray(picture[i-1][j-1])[1];
-            int tm = getPixelArray(picture[i-1][j])[1];
-            int tr = getPixelArray(picture[i-1][j+1])[1];
+            int ttll = getPixelArray(picture[i-2][j-2])[1];
+            int ttlm = getPixelArray(picture[i-2][j-1])[1];
+            int ttmm = getPixelArray(picture[i-2][j])[1];
+            int ttrm = getPixelArray(picture[i-2][j+1])[1];
+            int ttrr = getPixelArray(picture[i-2][j+2])[1];
+
+            int tll = getPixelArray(picture[i-1][j-2])[1];
+            int tlm = getPixelArray(picture[i-1][j-1])[1];
+            int tmm = getPixelArray(picture[i-1][j])[1];
+            int trm = getPixelArray(picture[i-1][j+1])[1];
+            int trr = getPixelArray(picture[i-1][j+2])[1];
             
+            int mll = getPixelArray(picture[i][j-2])[1];
             int ml = getPixelArray(picture[i][j-1])[1];
             int m = getPixelArray(picture[i][j])[1];
             int mr = getPixelArray(picture[i][j+1])[1];
+            int mrr = getPixelArray(picture[i][j+2])[1];
             
+            int bll = getPixelArray(picture[i+1][j-2])[1];
             int bl = getPixelArray(picture[i+1][j-1])[1];
             int bm = getPixelArray(picture[i+1][j])[1];
             int br = getPixelArray(picture[i+1][j+1])[1];
+            int brr = getPixelArray(picture[i+1][j+2])[1];
+
+            int bbll = getPixelArray(picture[i+2][j-2])[1];
+            int bblm = getPixelArray(picture[i+2][j-1])[1];
+            int bbmm = getPixelArray(picture[i+2][j])[1];
+            int bbrm = getPixelArray(picture[i+2][j+1])[1];
+            int bbrr = getPixelArray(picture[i+2][j+2])[1];
 
             int[][] mask = {
-               { -1, -1, -1 },
-               { -1,  8, -1 },
-               { -1, -1, -1 }
+               { -1, -1, -1, -1, -1 },
+               { -1,  0,  0,  0, -1 },
+               { -1,  0, 16,  0, -1 },
+               { -1,  0,  0,  0, -1 },
+               { -1, -1, -1, -1, -1 }
             };
 
             int[][] neighborhood = {
-               { tl, tm, tr },
-               { ml,  m, mr },
-               { bl, bm, br },
+               {ttll, ttlm, ttmm, ttrm, ttrr},
+               { tll, tlm,  tmm,  trm,  trr },
+               { mll, ml,   m,    mr,   mrr },
+               { bll, bl,   bm,   br,   brr },
+               {bbll, bblm, bbmm, bbrm, bbrr}
             };
 
             int surround = 0;
-            for(int x = 0; x < 3; x++)
+            for(int x = 0; x < 5; x++)
             {
-               for(int y = 0; y < 3; y++)
+               for(int y = 0; y < 5; y++)
                {
                   neighborhood[x][y] *= mask[x][y];
                   surround += neighborhood[x][y];
